@@ -1,1 +1,26 @@
 name: serverless deploy
+
+
+
+on:
+  push:
+    branches:
+      -main
+
+jops:
+  deploy:
+    name: deploy
+    runs-on: ububtu-latest
+
+
+    steps:
+      - uses: actions/checkput@v3
+
+      - name: install SLS and Deploy
+        uses: severless/github-action@v3
+        with:
+          args: -c"sls plugin install -n serverless-wsgi && sls plugin install -n serverless-python-requirements && sls deploy"
+          entrypoint: /bin/sh
+          env:
+            AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+            AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
